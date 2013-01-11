@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- the d3 library is always included so we get d3 mode access -->
+    <script type="text/javascript" src="d3.js"></script>
+    <style>
+    circle {
+        stroke:black;
+        stroke-width:1px;
+        fill:MediumSeaGreen;
+        opacity:0.5;
+    }
+    </style>
+</head>
+<body>
+    <script>
+        d3.json('data/stations_graph.json', function(json){
+            
+            var width = 1500,
+                height = 1500;
+            
+            var svg = d3.select('body')
+              .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            // we made some nodes
+            var node = svg.selectAll("circle.node")
+              .data(json.nodes)
+              .enter()
+              .append("circle")
+                .attr("class", "node")
+                .attr("r", 12);
+            
+            // we made the lines
+            var link = svg.selectAll("line.link")
+              .data(json.links)
+              .enter().append("line")
+                .style('stroke','black');
+            
+            // now we should create the forces that will make all our data stuck up in the corner - spread out!
+            var force = d3.layout.force()
+                .charge(-120)
+                .linkDistance(30)
+                .size([width, height])
+                .nodes(json.nodes) 
+                .links(json.links) 
+                .start(); 
+
+            // wait stuff was still stuck in the corner! duh we gotta animate yo.
+            force.on("tick", function() { // so we will apply the force on every "tick" or step 
+                link.attr("x1", function(d) { return d.source.x; }) // where the hell is this d coming from? 
+                    .attr("y1", function(d) { return d.source.y; }) // remember the last example? anytime you use the magic
+                    .attr("x2", function(d) { return d.target.x; }) // of the data() method ... you make this secret anonyomous function
+                    .attr("y2", function(d) { return d.target.y; }); // and it happens to accept "d" as input. it makes sure that "d"
+                    // is cooresponding to your original data. the value changes over time as D3 loops
+                
+                node.attr("cx", function(d) { return d.x; }) // we do the same to the nodes!
+                    .attr("cy", function(d) { return d.y; }); // the same i say!
+                });
+        });
+    </script>
+</body>
+</html>

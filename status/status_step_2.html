@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- the d3 library is always included so we get d3 mode access -->
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script>
+    // draw the data
+    function draw(data) {
+        "use strict";
+        d3.select("body") // the select() method "selects" the body element and gets it ready for ...
+
+        .append("ul") // us to append() a UL to it! (this just adds a ul to the end of the section but just inside the end of the script). it returns this as a selection. we started a chain!
+
+        .selectAll("li") // then we selectAll() the li elements on the page
+        // WOAH! but there aren't any li elements on the page! we are just preparing things for new
+        // li elements to enter into the data viz! basically, we made an empty selection. an array with
+        // nothing in it ... except we gave it the power of ... the DATA METHOD. sneaky!
+
+        .data(data) // this is the data() method that allows the li above to accept data!
+        // it's the glue between the data and the li. and allows the the array to be as big as we have data points! for our purposes today, it going to be the number of subway lines.
+
+        .enter() // almost done! now we have the enter() method. this gives us back a selection that has an
+        // array that has all the cool data for all the new elements that will sneakily appear.
+        // because we have data, but don't actually have li's on the page yet.
+        // enter() is very important for dynamic pages. where elements come and go. because it selects
+        // ONLY the elements that have a data point, but aren't actually on the screen yet!
+        // in this case ... enter() is super greedy and returns a selection for all the data. since there
+        // are no elements on the page. enter() want's it all!
+
+        .append("li") // now we tell D3 what to do with each of these elements 
+        // that the method enter() wants. 
+        // so we chain .append() to the .enter() method. and in this case, we are appending the li's!
+
+            .text(function (d) { // the text function takes a string and adds it between the <li> and </li>
+                // ... finally we write a callback function as the text's second argument.
+                // woah wait. do we know what a callback is? super simple, it's just a function that
+                // runs after another function has already run! it's just calling the first one back
+                // ... maybe (bad joke) ... really, this is a fancy way of writing a for loop.
+                // it's saying when we append text strings to the "list items", iterate through all the items
+                // and where the hell did the d come from? what are you DOING?! no worries ... 
+                // it's the magic of the data() method ... you make this secret anonyomous function
+                // and it happens to accept "d" as input. it makes sure that "d"
+                // is cooresponding to your original data. the value changes over time as D3 loops
+                // that we have for .d and return those as text.
+                return d.name + ": " + d.status; // and ask for the name ... and the ... status.
+                // so the callback just gets those two items and make a simple list!
+        });
+    }
+    </script>
+</head>
+<body>
+    <script>
+        d3.json("path to your .json file", draw);
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- the d3 library is always included so we get d3 mode access -->
+    <script type="text/javascript" src="d3.js"></script>
+    </script>
+    <style>
+    circle {
+        stroke:black;
+        stroke-width:1px;
+        fill:MediumSeaGreen;
+        opacity:0.5;
+    }
+    </style>
+</head>
+<body>
+    <script>
+        d3.json('data/stations_graph.json', function(json){
+            // so the first thing we will do is say where to draw the svg files!
+            // we create variables for width and height. simple enough!
+            var width = 1500,
+                height = 1500;
+        });
+    </script>
+</body>
+</html>

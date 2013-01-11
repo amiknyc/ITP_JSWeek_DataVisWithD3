@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script type="text/javascript" src="d3.js"></script>
+    <script>
+    function draw(data) {
+        "use strict";
+        d3.select("body")
+          .append("ul")
+          .selectAll("li")
+          .data(data)
+          .enter()
+          .append("li")
+            .text(function (d) {
+                return d.name + ": " + d.status;
+            });
+        // let's tell D3 to select all the list items!
+        d3.selectAll("li")
+            // then we chain (ooh more chainz) a style to it!
+            // the first argument applies style to the font, and then we have another callback
+            .style("font-weight", function(d){
+                // so if the status of a line is mmm good?
+                if (d.status == "GOOD SERVICE"){
+                    // we'll make the text look normal
+                    return "normal"
+                    // OR ELSE ...
+                } else {
+                    // we'll make it bold! run it!
+                    return "bold"
+                }
+            })
+        
+    }
+    </script>
+</head>
+<body>
+    <script>
+        d3.json('data/service_status.json', draw);
+    </script>
+</body>
+</html>

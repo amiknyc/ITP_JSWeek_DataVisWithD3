@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- the d3 library is always included so we get d3 mode access -->
+    <script type="text/javascript" src="d3.js"></script>
+    <style>
+    circle {
+        stroke:black;
+        stroke-width:1px;
+        fill:MediumSeaGreen;
+        opacity:0.5;
+    }
+    </style>
+</head>
+<body>
+    <script>
+            d3.json('data/stations_graph.json', function(json){
+                // so the first thing we will do is say where to draw the svg files!
+                // we create variables for width and height. simple enough!
+                var width = 1500,
+                    height = 1500;
+                // next let's make some more variables, this time for our vector group!
+                var svg = d3.select('body')
+                    .append('svg') // we append the svg! this is adding a new element as a child of the 
+                    // selected element. we told d3 to select the body ... so by chaining the .append() method
+                    // to the .select() method ... we are adding the svg as a child to the body!
+
+                    // hey why don't we just chain some attributes on to the svg like ... height and width?
+                    // we are just saying that the svgs that we appended to the body should live inside
+                    // the height and the width
+                    .attr('width', width)
+                    .attr('height', height);
+
+                    // now we want to make some nodes for the various stations in the MTA subway system
+                var node = svg.selectAll("circle.node") // first lets give it the style! we make 
+                    // a node looks like the circle style we made in our stylesheet on line 9!
+                    .data(json.nodes) // woah! nodes? wait im confused ... how did this become plural? 
+                    // oh i see ... the JSON file that is in the data folder has some of the data labeled
+                    // as "nodes"! i'm just telling D3 that when it looks at the data, it needs to use
+                    // the stuff labeled as "nodes"
+                    .enter() // looks familiar! hey D3, enter a node for data if it's not already there man ...
+                    .append("circle") // so we appended a circle, huh? we are telling D3 that as it loops 
+                    // through the selection of data.nodes from the JSON file ... that wherever it sees it 
+                    // needs to .enter() data, that it should draw circles! circles are built into D3
+                        .attr("class", "node") // and those circles all have attributes! we can apply a "class"
+                        .attr("r", 12); // like a radius of 12 :)
+                    // draw the links!
+                    var link = svg.selectAll("line.link")
+                    .data(json.links)
+                    .enter().append("line")
+                        .style('stroke','black');
+        });
+    </script>
+</body>
+</html>

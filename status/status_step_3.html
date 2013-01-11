@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script>
+    function draw(data) {
+        "use strict";
+
+        // this is method chaining! or cascade ...
+        // we “chain” methods together with periods
+        // and this let's us perform several actions in a single line of code! woah!
+        // wait wait ... backup, method? cascade? you mean the cleaner? the dishsoap? no!
+
+        // methods are functions that belong to objects!
+
+        // a method is just a piece of code - called by name  - that is associated with an object.
+
+        // "method" is just another word for "function" EXCEPT that methods are implicitly passed
+        // to the object for which they were called.
+
+        // methods are able to operate on the data within the class.
+
+        // methods are designed to operate directly on the
+        // properties of the object to which they belong.
+
+        // each method returns a selection which
+        // in turn has more methods that return a selection.
+
+        // and a selection is an array of elements that have 
+        // special methods that allow us data nerds to
+        // perform operations on all the elements within a selection.
+
+        // remember! an object is an instance of a class ...
+        // and the class is just defining that object ... 
+        // and an object is an instance of that data!
+
+        // lastly to save hours of dubugging - remember that ORDER matters!
+        // when one method sends something down the chain, that output has to
+        // MATCH the input type for the next method in the chain.
+        // it's like a relay race, if you can't pass the baton, you can't
+        // finish the race. \(T_T)/
+
+        d3.select("body")
+        .append("ul")
+        .selectAll("li")        
+        .data(data)
+        .enter()
+        .append("li")
+            .text(function (d) {
+                return d.name + ": " + d.status;
+        });
+    }
+    </script>
+</head>
+<body>
+    <script>
+        d3.json("service_status.json", draw);
+    </script>
+</body>
+</html>

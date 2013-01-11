@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- the d3 library is always included so we get d3 mode access -->
+    <script type="text/javascript" src="d3.js"></script>
+    <style>
+    circle {
+        stroke:black;
+        stroke-width:1px;
+        fill:MediumSeaGreen;
+        opacity:0.5;
+    }
+    </style>
+</head>
+<body>
+    <script>
+        d3.json('data/stations_graph.json', function(json){
+            
+            var width = 1500,
+                height = 1500;
+            
+            var svg = d3.select('body')
+              .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            // we made some nodes
+            var node = svg.selectAll("circle.node")
+              .data(json.nodes)
+              .enter()
+              .append("circle")
+                .attr("class", "node")
+                .attr("r", 12);
+            
+            // we made the lines
+            var link = svg.selectAll("line.link")
+              .data(json.links)
+              .enter().append("line")
+                .style('stroke','black');
+            
+            // now we should create the forces that will make all our data stuck up in the corner - spread out!
+            var force = d3.layout.force() // the force layout is built into D3, it applies a force directed
+                // algorithm to the nodes, which spreads them apart. so let's make it so that the nodes
+                // feel pushed by each other, but the lines keep the nodes stuck together.
+                .charge(-120) // OMG HOW REPULSIVE! this is based on the implementation of a quadtree that uses the
+                // Barnes-Hut Algorithm. it also gives everything a pseudo-gravity force that keeps all the
+                // nodes centered in the visible area. and also keeps any nodes that are stragglers,
+                // from flying off into no screen land. it does recursion and division and finds a
+                // center of mass ... omg brainz blowed. let's get back to D3 now shall we?
+                .linkDistance(30) // we can give our links a distance! also part of the Barnes-Hut
+                .size([width, height]) // we then tell it that the layout should at most be within the bounds
+                // of the size we specified! we will have no node stragglers!
+                .nodes(json.nodes) // we make sure it knows that we are applying it to the nodes
+                .links(json.links) // and don't forget the links. 
+                .start(); // this tells D3 that it can now start the simulation! you have to call this method
+                // when you first make your layout. and after you assign the nodes and links.
+                // and if the nodes or links change ... you need to call it again.
+        });
+    </script>
+</body>
+</html>
