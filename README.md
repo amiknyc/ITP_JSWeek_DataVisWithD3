@@ -1,2 +1,2 @@
-ITPjsweek_DataVisWithD3
+ITP_JSWeek_DataVisWithD3
 =======================
